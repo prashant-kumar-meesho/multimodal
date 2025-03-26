@@ -109,7 +109,7 @@ class TransformerEncoderLayer(nn.Module):
         d_model: int,
         n_head: int,
         dim_feedforward: int,
-        dropout: float = 0.0,
+        # dropout: float = 0.0,
         activation: Callable[..., nn.Module] = nn.ReLU,
         layer_norm_eps: float = 1e-12,
         norm_first: bool = False,
@@ -120,14 +120,14 @@ class TransformerEncoderLayer(nn.Module):
             dim_q=d_model,
             dim_kv=d_model,
             n_head=n_head,
-            attn_module=SelfAttention(dropout),
+            attn_module=SelfAttention(),
         )
-        self.attention_dropout = nn.Dropout(dropout)
+        # self.attention_dropout = nn.Dropout(dropout)
         # feedforward block
         self.feedforward = MLP(
-            d_model, d_model, dim_feedforward, dropout=dropout, activation=activation
+            d_model, d_model, dim_feedforward, activation=activation
         )
-        self.feedforward_dropout = nn.Dropout(dropout)
+        # self.feedforward_dropout = nn.Dropout(dropout)
         # layernorms
         self.attention_layernorm = Fp32LayerNorm(d_model, eps=layer_norm_eps)
         self.feedforward_layernorm = Fp32LayerNorm(d_model, eps=layer_norm_eps)
@@ -145,12 +145,12 @@ class TransformerEncoderLayer(nn.Module):
             head_mask=head_mask,
             return_attn_weights=True,
         )
-        output = self.attention_dropout(output)
+        # output = self.attention_dropout(output)
         return output, attn_weights
 
     def _feedforward_block(self, hidden_states: Tensor) -> Tensor:
         h = self.feedforward(hidden_states)
-        h = self.feedforward_dropout(h)
+        # h = self.feedforward_dropout(h)
         return h
 
     def _forward_prenorm(
@@ -228,7 +228,7 @@ class TransformerEncoder(nn.Module):
         d_model: int,
         n_head: int,
         dim_feedforward: int,
-        dropout: float = 0.0,
+        # dropout: float = 0.0,
         activation: Callable[..., nn.Module] = nn.ReLU,
         layer_norm_eps: float = 1e-12,
         norm_first: bool = False,
@@ -241,7 +241,7 @@ class TransformerEncoder(nn.Module):
                     d_model,
                     n_head,
                     dim_feedforward,
-                    dropout,
+                    # dropout,
                     activation,
                     layer_norm_eps,
                     norm_first,
