@@ -21,7 +21,7 @@ class SelfAttention(nn.Module):
 
     def __init__(self, attn_dropout: float = 0.0) -> None:
         super().__init__()
-        self.attn_dropout = attn_dropout
+        # self.attn_dropout = attn_dropout
 
     def forward(
         self,
@@ -61,7 +61,7 @@ class SelfAttention(nn.Module):
             v,
             attention_mask=attention_mask,
             head_mask=head_mask,
-            attn_dropout=self.attn_dropout if self.training else 0.0,
+            # attn_dropout=self.attn_dropout if self.training else 0.0,
         )
 
         return out.unflatten(2, shape), attn_probs
@@ -231,7 +231,7 @@ def scaled_dot_product_attention(
     attn = attn_float.type_as(attn)  # b, h, d1, ..., q_dn, k_dn
     # This is actually dropping out entire tokens to attend to, which might
     # seem a bit unusual, but is taken from the original Transformer paper.
-    attn = F.dropout(attn, p=attn_dropout)
+    # attn = F.dropout(attn, p=attn_dropout)
     # Mask heads if we want to
     if head_mask is not None:
         attn = attn * head_mask
